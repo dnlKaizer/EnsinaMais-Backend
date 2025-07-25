@@ -21,6 +21,9 @@ public class CorsConfig {
         // Permite requisições do frontend Angular
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         
+        // Permite requisições do frontend Netlify
+        configuration.setAllowedOrigins(Arrays.asList("https://ensinamais-frontend.netlify.app"));
+        
         // Permite todos os métodos HTTP
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         
