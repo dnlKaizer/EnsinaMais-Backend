@@ -28,15 +28,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String username = tokenProvider.getUsernameFromJWT(jwt);
+                System.out.println("JWT válido para usuário: " + username);
+                
                 UserDetails userDetails = usuarioDetailsService.loadUserByUsername(username);
+                System.out.println("Authorities carregadas: " + userDetails.getAuthorities());
+                
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+                System.out.println("Autenticação definida no contexto de segurança");
+            } else {
+                System.out.println("JWT inválido ou não fornecido");
             }
         } catch (Exception ex) {
             System.out.println("Não foi possível definir a autenticação do usuário no contexto de segurança: "
                     + ex.getMessage());
+            ex.printStackTrace();
         }
         filterChain.doFilter(request, response);
     }
